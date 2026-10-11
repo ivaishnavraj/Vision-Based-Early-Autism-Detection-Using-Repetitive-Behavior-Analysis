@@ -1,6 +1,6 @@
 <div align="center">
 
-# Autism Spectrum Stereotypic Behavior Detection
+# Vision Based Early Autism Detection Using Repetitive Behavior Analysis
 
 **Video analysis pipeline utilizing Google MediaPipe Pose Landmarker Lite and PyTorch Long Short-Term Memory (LSTM) Networks for automated detection and quantification of Self-Stimulatory Behaviors (Stimming).**
 
