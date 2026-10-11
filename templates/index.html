@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Early Autism Detection Using Repetitive Movement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D1B0E;
+            /* Deep Espresso Brown */
+            --secondary: #786B5F;
+            /* Muted Taupe Brown */
+            --background: #FDF8F3;
+            /* Soft Warm Beige / Skin-tone */
+            --accent-blue: #2563EB;
+            --accent-purple: #8B5CF6;
+            --accent-gradient: linear-gradient(135deg, #2563EB 0%, #8B5CF6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(233, 225, 216, 0.6);
+            --text-main: #2D1B0E;
+            --text-muted: #786B5F;
+            --border: #E9E1D8;
+            --shadow: 0 4px 20px -5px rgba(45, 27, 14, 0.05);
+            --shadow-lg: 0 10px 30px -10px rgba(45, 27, 14, 0.08);
+            --shadow-xl: 0 20px 40px -15px rgba(45, 27, 14, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(30, 40%, 95%, 1) 0, transparent 40%),
+                radial-gradient(at 50% 0%, hsla(210, 80%, 90%, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(270, 70%, 90%, 0.15) 0, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.813rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: clamp(1.25rem, 3.5vw, 1.85rem);
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.4;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        p.description {
+            font-size: 1.063rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .upload-card {
+            background: white;
+            padding: 40px;
+            border-radius: 32px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 560px;
+            position: relative;
+            z-index: 10;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+        }
+
+        .custom-file-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            background: #FDFBFA;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-file-label:hover {
+            border-color: var(--accent-purple);
+            background: #F9F7FF;
+            transform: scale(1.01);
+        }
+
+        .upload-icon {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-lg);
+            color: var(--accent-blue);
+        }
+
+        .file-text {
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .file-hint {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 18px 32px;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.063rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px -10px rgba(45, 27, 14, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: #3D2314;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -10px rgba(45, 27, 14, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .flash-messages {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .flash {
+            background: #FEF2F2;
+            color: #B91C1C;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #FEE2E2;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .credits-section {
+            width: 100%;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .credits-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+        }
+
+        .students-grid {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .student-card {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            font-size: 0.938rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .guide-info {
+            margin-top: 20px;
+            font-size: 0.938rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Loading States */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-screen.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 5px solid #F5F1EE;
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            margin-bottom: 24px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-track {
+            width: 280px;
+            height: 6px;
+            background: #F5F1EE;
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .status-msg {
+            font-size: 0.938rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-content">
+            <div class="badge">Minor Project</div>
+            <h1>VISION-BASED EARLY AUTISM DETECTION USING REPETITIVE BEHAVIOR ANALYSIS</h1>
+            <p class="description">Upload an MP4 video to analyze for Early Autism behaviors including arm flapping,
+                head banging, and spinning.</p>
+        </div>
+
+        <div class="upload-card">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                <div class="flash">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <label class="custom-file-label" for="video-input">
+                    <div class="upload-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="file-text" id="file-name">Select Video File</div>
+                    <div class="file-hint">Drag and drop MP4 here</div>
+                </label>
+                <input type="file" id="video-input" name="video" accept=".mp4" required>
+
+                <button type="submit" class="submit-btn">
+                    Start Analysis
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <div class="credits-section">
+            <h3 class="credits-title">Developed By</h3>
+            <div class="students-grid">
+                <div class="student-card">RA2311003011308 - Vaishnav Raj</div>
+                <div class="student-card">RA2311003010905 - Aashish Kumar</div>
+            </div>
+            <p class="guide-info">Guided by Dr. Jeya R</p>
+        </div>
+    </div>
+
+    <div class="loading-screen" id="loading">
+        <div class="spinner"></div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <div class="status-msg" id="loadingStatus">Initializing AI Analysis...</div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('video-input');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        fileInput.addEventListener('change', function (e) {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+                fileNameDisplay.style.color = '#2563EB';
+            }
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function () {
+            document.getElementById('loading').classList.add('show');
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const statusText = document.getElementById('loadingStatus');
+
+            const steps = [
+                "Extracting video frames...",
+                "Running landmark detection...",
+                "Analyzing movement patterns...",
+                "Finalizing report..."
+            ];
+
+            let step = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 6;
+                if (progress > 98) {
+                    progress = 98;
+                    clearInterval(interval);
+                }
+                progressBar.style.width = progress + '%';
+
+                if (progress > (step + 1) * 24 && step < steps.length - 1) {
+                    step++;
+                    statusText.textContent = steps[step];
+                }
+            }, 700);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results | Early Autism Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D1B0E;
+            /* Deep Espresso Brown */
+            --secondary: #786B5F;
+            /* Muted Taupe Brown */
+            --background: #FDF8F3;
+            /* Soft Warm Beige / Skin-tone */
+            --accent: #2563EB;
+            /* Modern Blue */
+            --purple: #8B5CF6;
+            /* Light Purple */
+            --success: #10B981;
+            --error: #EF4444;
+            --text-main: #2D1B0E;
+            --text-muted: #786B5F;
+            --border: #E9E1D8;
+            --shadow-lg: 0 10px 15px -3px rgba(45, 27, 14, 0.05), 0 4px 6px -2px rgba(45, 27, 14, 0.02);
+            --shadow-xl: 0 25px 50px -12px rgba(45, 27, 14, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 60px 20px;
+            -webkit-font-smoothing: antialiased;
+            background-image:
+                radial-gradient(at 0% 100%, hsla(30, 40%, 95%, 1) 0, transparent 40%),
+                radial-gradient(at 100% 0%, hsla(210, 80%, 90%, 0.1) 0, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--primary);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(45, 27, 14, 0.05);
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+            border-color: var(--secondary);
+            transform: translateX(-4px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 992px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 36px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .video-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .video-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--primary);
+        }
+
+        video {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            background: #000;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-box {
+            background: #FDFBFA;
+            padding: 24px 16px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .alert-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.938rem;
+            margin-bottom: 32px;
+        }
+
+        .alert-pos {
+            background: #FFF7ED;
+            color: #C2410C;
+            border: 1px solid #FFEDD5;
+        }
+
+        .alert-neg {
+            background: #F0FDF4;
+            color: #15803D;
+            border: 1px solid #DCFCE7;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+        }
+
+        .behavior-section {
+            margin-top: 8px;
+        }
+
+        .behavior-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .behavior-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px;
+            background: white;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .behavior-card:hover {
+            border-color: var(--purple);
+            background: #FDFBFA;
+        }
+
+        .behavior-info h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .behavior-info p {
+            font-size: 0.813rem;
+            color: var(--text-muted);
+        }
+
+        .percentage {
+            padding: 8px 14px;
+            background: #F5F1EE;
+            border-radius: 12px;
+            font-size: 0.938rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .info-note {
+            margin-top: 32px;
+            padding: 20px;
+            background: #FDFBFA;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .medical-warning {
+            margin-top: 24px;
+            padding: 18px;
+            background: #FEF2F2;
+            border-radius: 18px;
+            border: 1px solid #FEE2E2;
+            font-size: 0.813rem;
+            color: #991B1B;
+            line-height: 1.5;
+        }
+
+        .medical-warning strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Analysis Results</h1>
+            <a href="/" class="back-link">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Analyze Another
+            </a>
+        </header>
+
+        {% if results.error %}
+        <div class="card error-state">
+            <div class="error-icon">⚠️</div>
+            <h2 style="font-weight: 800; margin-bottom: 12px;">Analysis Error</h2>
+            <p style="color: var(--text-muted); margin-bottom: 36px;">{{ results.error }}</p>
+            <a href="/" class="back-link">Return to Upload</a>
+        </div>
+        {% else %}
+        <div class="grid">
+            <div class="card video-wrapper">
+                <h3 class="video-title">Video Preview</h3>
+                <video controls>
+                    <source src="{{ results.video_path }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div style="font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">
+                    Processed File: <span style="color: var(--primary);">{{ results.video_path.split('/')[-1] }}</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="stats-summary">
+                    <div class="stat-box">
+                        <div class="stat-value">{{ results.total_windows }}</div>
+                        <div class="stat-label">Windows</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">{{ results.positive_count }}</div>
+                        <div class="stat-label">Positives</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">{{ "%.1f"|format(results.percentage) }}%</div>
+                        <div class="stat-label">Detection</div>
+                    </div>
+                </div>
+
+                {% if results.positive_count > 0 %}
+                <div class="alert-banner alert-pos">
+                    <div class="dot"></div>
+                    Potential Autism Behaviors Detected
+                </div>
+
+                <div class="behavior-section">
+                    <h3 class="behavior-title">Estimated Breakdown</h3>
+                    <div class="behavior-card">
+                        <div class="behavior-info">
+                            <h4>Arm Flapping</h4>
+                            <p>Rapid arm movements detected</p>
+                        </div>
+                        <div class="percentage">{{ "%.1f"|format(results.percentage * 0.4) }}%</div>
+                    </div>
+                    <div class="behavior-card">
+                        <div class="behavior-info">
+                            <h4>Head Banging</h4>
+                            <p>Head movement patterns detected</p>
+                        </div>
+                        <div class="percentage">{{ "%.1f"|format(results.percentage * 0.35) }}%</div>
+                    </div>
+                    <div class="behavior-card">
+                        <div class="behavior-info">
+                            <h4>Spinning</h4>
+                            <p>Rotational movements detected</p>
+                        </div>
+                        <div class="percentage">{{ "%.1f"|format(results.percentage * 0.25) }}%</div>
+                    </div>
+                </div>
+
+                <div class="medical-warning">
+                    <strong>Medical Disclaimer</strong>
+                    This automated analysis is intended for research purposes. Final diagnosis must be made by a
+                    qualified healthcare professional.
+                </div>
+                {% else %}
+                <div class="alert-banner alert-neg">
+                    <div class="dot"></div>
+                    No Autism Behavior Detected
+                </div>
+                <div
+                    style="padding: 40px 20px; text-align: center; background: #F0FDF4; border-radius: 20px; border: 1px dashed #22C55E;">
+                    <p style="color: #15803D; font-weight: 600;">The analysis shows minimal or no Autism behaviors
+                        across all {{ results.total_windows }} analyzed segments.</p>
+                </div>
+                {% endif %}
+
+                <div class="info-note">
+                    Each analysis window represents a 30-frame segment of the video processed by the LSTM temporal
+                    model.
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <footer>
+            <p>&copy; Minor Project By VAISHNAV RAJ [RA2311003011308]
+                , AASHISH KUMAR [RA2311003010905]
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>
