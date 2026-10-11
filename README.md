@@ -13,10 +13,7 @@
 [![Flask](https://img.shields.io/badge/Flask-Web%20Framework-000000?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 [![Dataset](https://img.shields.io/badge/Dataset-SSBD%20In--the--Wild-FFB300?style=flat-square)](http://staff.icar.cnr.it/cucchiara/ssbd/)
 
-<br /><br />
-
-<img src="Arch_Diagram.png" alt="Architecture Overview" width="900px" style="border-radius: 8px; border: 1px solid #e1e4e8;" />
-
+<br />
 </div>
 
 ---
